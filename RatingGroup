@@ -1,0 +1,23 @@
+import { RatingGroup } from "@chakra-ui/react"
+import { IoStarSharp } from "react-icons/io5" // Replace with your custom icon
+import React from "react"
+
+const BazaarvoiceStarRating = ({ rating = 0, reviewCount = 0 }) => (
+  <div>
+    <RatingGroup.Root readOnly count={5} defaultValue={rating} size="md" colorPalette="yellow">
+      <RatingGroup.HiddenInput />
+      <RatingGroup.Control>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <RatingGroup.Item key={index} index={index + 1}>
+            <RatingGroup.ItemIndicator icon={<IoStarSharp />} />
+          </RatingGroup.Item>
+        ))}
+      </RatingGroup.Control>
+    </RatingGroup.Root>
+    <span style={{ marginLeft: 8 }}>
+      {rating.toFixed(1)} ({reviewCount} reviews)
+    </span>
+  </div>
+)
+
+<BazaarvoiceStarRating rating={4.2} reviewCount={123} />
