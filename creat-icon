@@ -1,0 +1,48 @@
+Create a Custom Star Icon with Chakra UI
+You have two main options:
+
+Use the Icon component and provide your own SVG path.
+
+Use the createIcon utility for reusable custom icons.
+
+Example using createIcon:
+
+jsx
+import { createIcon } from "@chakra-ui/react";
+
+// Replace the 'd' value with your preferred star SVG path
+const StarIcon = createIcon({
+  displayName: "StarIcon",
+  viewBox: "0 0 24 24",
+  path: (
+    <path
+      fill="currentColor"
+      d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+    />
+  ),
+});
+You can design your own SVG or export it from Figma/Sketch, then use the path data here.
+
+2. Build the Star Rating Component
+jsx
+import { HStack } from "@chakra-ui/react";
+
+const BazaarvoiceStarRating = ({ rating = 0, max = 5 }) => (
+  <HStack spacing={1}>
+    {Array.from({ length: max }).map((_, i) => (
+      <StarIcon
+        key={i}
+        boxSize={6}
+        color={i < Math.round(rating) ? "yellow.400" : "gray.300"}
+        aria-label={i < rating ? "Filled star" : "Empty star"}
+      />
+    ))}
+  </HStack>
+);
+Adjust boxSize and color to fit your design.
+
+You can use fractional stars by adding logic for half-filled icons if needed.
+
+3. Use Your Component
+jsx
+<BazaarvoiceStarRating rating={4.2} max={5} />
