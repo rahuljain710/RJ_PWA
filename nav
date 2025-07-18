@@ -1,0 +1,156 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { Menu, Search, ShoppingBag, User } from "lucide-react"
+import { Button } from "@/components/ui/button"
+
+export default function ScrollNavigation() {
+  const [scrollY, setScrollY] = useState(0)
+  const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up")
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY
+
+    const updateScrollDirection = () => {
+      const currentScrollY = window.scrollY
+      const direction = currentScrollY > lastScrollY ? "down" : "up"
+
+      if (direction !== scrollDirection && Math.abs(currentScrollY - lastScrollY) > 10) {
+        setScrollDirection(direction)
+      }
+
+      setScrollY(currentScrollY)
+      setIsScrolled(currentScrollY > 50)
+      lastScrollY = currentScrollY > 0 ? currentScrollY : 0
+    }
+
+    const handleScroll = () => {
+      requestAnimationFrame(updateScrollDirection)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [scrollDirection])
+
+  return (
+    <>
+      {/* Navigation */}
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
+          scrollDirection === "down" && scrollY > 100 ? "-translate-y-full" : "translate-y-0"
+        } ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100" : "bg-transparent"}`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 lg:h-20">
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <div
+                className={`font-bold text-xl transition-colors duration-300 ${
+                  isScrolled ? "text-gray-900" : "text-white"
+                }`}
+              >
+                PATAGONIA
+              </div>
+            </div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-8">
+              {["Men", "Women", "Kids", "Sports", "Activism", "Stories"].map((item) => (
+                <a
+                  key={item}
+                  href="#"
+                  className={`text-sm font-medium transition-colors duration-300 hover:opacity-70 ${
+                    isScrolled ? "text-gray-900" : "text-white"
+                  }`}
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
+
+            {/* Right side icons */}
+            <div className="flex items-center space-x-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`transition-colors duration-300 ${
+                  isScrolled ? "text-gray-900 hover:bg-gray-100" : "text-white hover:bg-white/20"
+                }`}
+              >
+                <Search className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`transition-colors duration-300 ${
+                  isScrolled ? "text-gray-900 hover:bg-gray-100" : "text-white hover:bg-white/20"
+                }`}
+              >
+                <User className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`transition-colors duration-300 ${
+                  isScrolled ? "text-gray-900 hover:bg-gray-100" : "text-white hover:bg-white/20"
+                }`}
+              >
+                <ShoppingBag className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`lg:hidden transition-colors duration-300 ${
+                  isScrolled ? "text-gray-900 hover:bg-gray-100" : "text-white hover:bg-white/20"
+                }`}
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <div className="relative h-screen bg-gradient-to-br from-blue-900 via-green-800 to-blue-800">
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="relative z-10 flex items-center justify-center h-full text-center text-white">
+          <div className="max-w-4xl px-4">
+            <h1 className="text-5xl lg:text-7xl font-bold mb-6">Built to Endure</h1>
+            <p className="text-xl lg:text-2xl mb-8 opacity-90">
+              We make gear for the silent sports: climbing, surfing, skiing and snowboarding, fly fishing, and trail
+              running.
+            </p>
+            <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
+              Shop Now
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Content Sections */}
+      <div className="bg-white">
+        {[1, 2, 3, 4, 5].map((section) => (
+          <div key={section} className="py-20 px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-6 text-gray-900">Section {section}</h2>
+              <p className="text-lg text-gray-600 mb-8">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex ea commodo consequat.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[1, 2, 3].map((item) => (
+                  <div key={item} className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
+                    <span className="text-gray-500">Content Block {item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  )
+}
