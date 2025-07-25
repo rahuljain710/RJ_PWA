@@ -1,0 +1,38 @@
+// theme.js
+import { extendTheme } from '@chakra-ui/react';
+
+const theme = extendTheme({
+  components: {
+    Form: {
+      variants: {
+        floating: {
+          container: {
+            _focusWithin: {
+              label: {
+                transform: "scale(0.85) translateY(-12px)",
+                color: "blue.500"
+              }
+            },
+            "input:not(:placeholder-shown) + label, .chakra-select__wrapper + label": {
+              transform: "scale(0.85) translateY(-12px)"
+            },
+            label: {
+              top: "1rem",
+              left: "1rem",
+              zIndex: 2,
+              position: "absolute",
+              backgroundColor: "white",
+              px: "0.25rem",
+              pointerEvents: "none",
+              mx: "0.25rem",
+              transformOrigin: "left top",
+              transition: "all 0.2s"
+            }
+          }
+        }
+      }
+    }
+  }
+});
+
+export default theme;
