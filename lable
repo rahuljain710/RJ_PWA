@@ -105,3 +105,7 @@ export default function App() {
   );
 }
 https://codesandbox.io/p/sandbox/r55jxd?file=%2FApp.tsx%3A1%2C1-62%2C1
+function isValidEmail(email) {
+  // Basic email regex. You can use a stronger one if desired.
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
