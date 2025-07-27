@@ -109,3 +109,28 @@ function isValidEmail(email) {
   // Basic email regex. You can use a stronger one if desired.
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
+
+
+if (!email) {
+      setError('Email is required.');
+      return;
+    }
+    if (!email.includes('@')) {
+      setError('@ is missing');
+      return;
+    }
+    const [localPart, domainPart] = email.split('@');
+    if (!domainPart) {
+      setError('Email address is incomplete');
+      return;
+    }
+    // If there's no dot after the @ (i.e. domain has no dot)
+    if (!domainPart.includes('.')) {
+      setError('Email address is incomplete');
+      return;
+    }
+    // This will catch other invalid email edge cases
+    if (!isValidEmail(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
