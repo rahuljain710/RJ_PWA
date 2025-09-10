@@ -16,26 +16,20 @@ const [productHitCount, setProductHitCount] = useState(false);
 
 
 
-
-const [contentHitsState, dispatch] = useReducer(
-  (state, action) => {
-    switch (action.type) {
-      case 'UPDATE_HIT':
-        const newArray = [...state];
-        newArray[action.index] = action.value;
-        return newArray;
-      case 'RESET':
-        return action.initialValues;
-      default:
-        return state;
-    }
-  },
+const [contentHitsState, setContentHitsState] = useState(
   secondaryindices.map(() => 0)
 );
 
-const updateContentHitCount = (index, value) => {
-  dispatch({ type: 'UPDATE_HIT', index, value });
-};
+// Single update function instead of array of setters
+const updateContentHitCount = useCallback((index, newValue) => {
+  setContentHitsState(prev => {
+    const newArray = [...prev];
+    newArray[index] = newValue;
+    return newArray;
+  });
+}, []);
 
 const contenthitcountarray = contentHitsState;
 const [productHitCount, setProductHitCount] = useState(false);
+
+// Usage: updateContentHitCount(index, value) instead of setcontentHitscountArray[index](value)
