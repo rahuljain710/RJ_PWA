@@ -1,35 +1,24 @@
-const [contentHitsState, setContentHitsState] = useState(
-  secondaryindices.map(() => 0)
-);
+// Always call hooks at the top level
+const { hits: clientHits, showMore: clientShowMore, isLastPage: clientIsLastPage, result: clientResult } = useInfiniteHits();
+const { status: clientStatus } = useInstantSearch(props);
 
-// Create the arrays from state
-const contenthitcountarray = contentHitsState;
-const setcontentHitscountArray = contentHitsState.map((_, index) => (newValue) => {
-  setContentHitsState(prev => {
-    const newArray = [...prev];
-    newArray[index] = newValue;
-    return newArray;
-  });
-});
+// Then conditionally assign values
+let hits, showMore, isLastPage, result, status, results;
 
-const [productHitCount, setProductHitCount] = useState(false);
-
-
-
-const [contentHitsState, setContentHitsState] = useState(
-  secondaryindices.map(() => 0)
-);
-
-// Single update function instead of array of setters
-const updateContentHitCount = useCallback((index, newValue) => {
-  setContentHitsState(prev => {
-    const newArray = [...prev];
-    newArray[index] = newValue;
-    return newArray;
-  });
-}, []);
-
-const contenthitcountarray = contentHitsState;
-const [productHitCount, setProductHitCount] = useState(false);
-
-// Usage: updateContentHitCount(index, value) instead of setcontentHitscountArray[index](value)
+if (!isServer) {
+  // Client-side: use hook values
+  hits = clientHits;
+  showMore = clientShowMore;
+  isLastPage = clientIsLastPage;
+  result = clientResult;
+  status = clientStatus;
+  results = {};
+} else {
+  // Server-side: use provided data
+  hits = algoliaHits;
+  results = algoliaResults;
+  showMore = () => {};
+  isLastPage = true;
+  status = { status: 'idle' };
+  result = results || {};
+}
