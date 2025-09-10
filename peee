@@ -1,11 +1,17 @@
-// Call hooks unconditionally
+const useInfiniteHits = () => {
+  if (typeof window === 'undefined') {
+    return { hits: [], showMore: () => {}, isLastPage: true, result: {} };
+  }
+  return require('react-instantsearch-hooks-web').useInfiniteHits();
+};
+
+const useInstantSearch = (props) => {
+  if (typeof window === 'undefined') {
+    return { status: { status: 'idle' } };
+  }
+  return require('react-instantsearch-hooks-web').useInstantSearch(props);
+};
+
+// Then use normally
 const infiniteHitsData = useInfiniteHits();
 const instantSearchData = useInstantSearch(props);
-
-// Use server data if available, otherwise use hook data
-const hits = isServer ? algoliaHits : infiniteHitsData.hits;
-const showMore = isServer ? () => {} : infiniteHitsData.showMore;
-const isLastPage = isServer ? true : infiniteHitsData.isLastPage;
-const result = isServer ? {} : infiniteHitsData.result;
-const status = isServer ? { status: 'idle' } : instantSearchData.status;
-const results = isServer ? algoliaResults : {};
