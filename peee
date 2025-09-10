@@ -1,0 +1,15 @@
+const [contentHitsState, setContentHitsState] = useState(
+  secondaryindices.map(() => 0)
+);
+
+// Create the arrays from state
+const contenthitcountarray = contentHitsState;
+const setcontentHitscountArray = contentHitsState.map((_, index) => (newValue) => {
+  setContentHitsState(prev => {
+    const newArray = [...prev];
+    newArray[index] = newValue;
+    return newArray;
+  });
+});
+
+const [productHitCount, setProductHitCount] = useState(false);
